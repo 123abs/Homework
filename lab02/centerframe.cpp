@@ -80,6 +80,24 @@ void CenterFrame::createUserCommandArea()
   connect(btnLine,&QPushButton::clicked,
           this,&CenterFrame::on_btnLineClicked);
 
+  //菱形按钮
+  btnDiamond = new QPushButton(group);
+  btnDiamond->setToolTip("绘制菱形");
+  btnDiamond->setCheckable(true);
+  btnDiamond->setIconSize(p.size());
+  p.fill(BACKGROUND_COLOR);
+
+  QPointF point4((p.size().width())/2,3);
+  QPointF point5(3,(p.size().height())/2);
+  QPointF point6(p.size().width()/2,p.size().height()-3);
+  QPointF point7(p.size().width()-3,p.size().height()/2);
+  QVector<QPointF> pointb;
+  pointb<<point4<<point5<<point6<<point7;
+  painter.drawPolygon(pointb);
+  btnDiamond->setIcon (QIcon(p));
+  connect(btnDiamond,&QPushButton::clicked,
+          this,&CenterFrame::on_btnDiamondClicked);
+
   // 三角形
   btnTriangle = new QPushButton(group);
   btnTriangle->setToolTip("绘制三角形");
@@ -143,6 +161,7 @@ void CenterFrame::createUserCommandArea()
   gridLayout->addWidget(btnLine,1,1);
   gridLayout->addWidget(btnText,2,1);
   gridLayout->addWidget(imgBtn,2,0);
+  gridLayout->addWidget(btnDiamond,3,0);
   gridLayout->setMargin(3);
   gridLayout->setSpacing(3);
   group->setLayout(gridLayout);
@@ -215,6 +234,7 @@ void CenterFrame::updateButtonStatus()
   btnTriangle->setChecked(false);
   btnEllipse->setChecked(false);
   btnText->setChecked(false);
+  btnDiamond->setChecked(false);
   edtText->setVisible(false);
 
   // 然后根据设置的绘图类型重新切换按键状态
@@ -236,6 +256,9 @@ void CenterFrame::updateButtonStatus()
       edtText->setVisible(true);      // 使编辑框可见
       edtText->setFocus();            // 编辑框获得输入焦点
       break;
+  case ST::Diamond:
+          btnDiamond->setChecked(true);
+          break;
   default:
       break;
   }
@@ -329,3 +352,15 @@ void CenterFrame::on_edtTextEdited(const QString &text)
 {
   drawWidget->setDrawnText(text);
 }
+//菱形对应按键
+void CenterFrame::on_btnDiamondClicked()
+{
+  if(btnDiamond->isChecked()){
+      updateButtonStatus();
+      drawWidget->setShapeType(ST::Diamond);
+  }else{
+      drawWidget->setShapeType(ST::None);
+  }
+
+}
+

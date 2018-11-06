@@ -43,6 +43,7 @@ protected slots:
    void on_btnLineClicked();
    void on_btnTriangleClicked();
    void on_btnTextClicked();
+   void on_btnDiamondClicked();
    void on_edtTextEdited(const QString &text);
 
 private:
